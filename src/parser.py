@@ -15,4 +15,5 @@ def create_parser():
     for key, value in ACTIONS.items():
         actions.add_argument(key, help=value, action="store_true")
     parser.add_argument('name', type=str, help='Project name')
+    parser.add_argument('--path', type=str, help='App directory')
     return parser

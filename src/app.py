@@ -36,17 +36,19 @@ def create_app_home_and_scripts(app_name):
     os.makedirs(_get_app_scripts(app_name), exist_ok=True)
 
 
-def create_app_proxy_executable(app_name):
+def create_app_proxy_executable(app_name, app_path):
     '''
     Generate a new proxy executable for a new app
     args:
         (str) app_name: Name of the app
+        (str) app_path: Workdir of the app
     '''
     from stat import S_IXGRP
     exec_path = os.path.join(c.LAZY_BADGER_BIN, app_name)
     with open(exec_path, 'w') as app_proxy:
         app_proxy.write(
             c.APP_PROXY_SCRIPT.format(
+                workdir=app_path,
                 app_scripts_dir=_get_app_scripts(app_name)
             )
         )
