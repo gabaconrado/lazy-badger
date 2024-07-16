@@ -1,0 +1,6 @@
+# Rust artifacts
+/target
+
+# Editor config
+.cspell.json
+.editorconfig
