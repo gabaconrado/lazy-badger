@@ -92,7 +92,6 @@ fn list_scripts_at_directory(dir: &Path) -> Result<Vec<(String, PathBuf)>, ListS
     let scripts = dir
         .read_dir()
         .map_err(ListScriptsError::ReadDirFailure)?
-        .into_iter()
         .filter_map(|f| f.ok())
         .filter(|f| f.path().is_file())
         .filter(|f| {

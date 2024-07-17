@@ -4,8 +4,6 @@ use std::process::ExitCode;
 
 use clap::Parser;
 
-use lazy_badger;
-
 // ******** Exit codes ******** //
 
 /// Script not found
@@ -40,7 +38,7 @@ fn main() -> ExitCode {
         Ok(output) if output.status().success() => {
             println!("{}", output.stdout());
             eprintln!("{}", output.stderr());
-            return ExitCode::SUCCESS;
+            ExitCode::SUCCESS
         }
         Ok(output) => {
             println!("{}", output.stdout());
@@ -49,11 +47,11 @@ fn main() -> ExitCode {
                 Some(c) => u8::try_from(c).unwrap_or(EXIT_UNKNOWN_CODE),
                 None => EXIT_UNKNOWN_CODE,
             };
-            return ExitCode::from(code);
+            ExitCode::from(code)
         }
         Err(err) => {
             eprintln!("Error running script: {err}");
-            return ExitCode::from(EXIT_RUN_SCRIPT);
+            ExitCode::from(EXIT_RUN_SCRIPT)
         }
     }
 }
