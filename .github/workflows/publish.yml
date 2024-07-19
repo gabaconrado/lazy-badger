@@ -45,6 +45,8 @@ jobs:
   release:
     needs: "check"
     runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
     steps:
       # Checkout the source
       - uses: "actions/checkout@v4"
