@@ -1,0 +1,55 @@
+# ---- General settings ---- #
+name: "Lazy Badger publish workflow"
+
+# ---- Triggers ---- #
+on:
+  push:
+    tags:
+      - "*"
+
+# ---- Workflow configuration ---- #
+env:
+  # Configure cargo to show output with colors
+  CARGO_TERM_COLOR: "always"
+
+defaults:
+  # Set default parameters for all run steps
+  run:
+    # Set shell as default script runner to force fail-fast
+    shell: "bash"
+
+# ---- Jobs ---- #
+jobs:
+  # Checks
+  check:
+    runs-on: "ubuntu-24.04"
+    steps:
+      # Checkout the source
+      - uses: "actions/checkout@v4"
+      # Check the version
+      - name: "check version"
+        run: "./scripts/ci/check-version.sh '${{ github.ref_name }}'"
+
+  # Publish to crates.io
+  publish:
+    needs: "check"
+    runs-on: "ubuntu-24.04"
+    steps:
+      # Checkout the source
+      - uses: "actions/checkout@v4"
+      # Check the version
+      - name: "cargo release"
+        run: "cargo publish --token '${CRATES_IO_TOKEN}'"
+
+  # Create a release in Github
+  release:
+    needs: "check"
+    runs-on: "ubuntu-24.04"
+    steps:
+      # Checkout the source
+      - uses: "actions/checkout@v4"
+      # Call the release from GH cli
+      - name: "gh release"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: "./scripts/ci/create-release.sh '${{ github.ref_name }}'"
