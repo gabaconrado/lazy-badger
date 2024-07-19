@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 #
 # This script uses the GH CLI to create a release
+#
 
 tag="${1}"
 

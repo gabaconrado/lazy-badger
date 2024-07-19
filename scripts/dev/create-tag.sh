@@ -17,4 +17,4 @@ if [ "${current_branch}" != "${MAIN_BRANCH}" ]; then
     echo "Tags must be created on the '${MAIN_BRANCH}'. Current is '${current_branch}'"
 fi
 
-git tag "${tag}" -a
+git tag "${tag}" -a && git push origin "${tag}"
