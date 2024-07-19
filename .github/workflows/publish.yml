@@ -22,7 +22,7 @@ defaults:
 jobs:
   # Checks
   check:
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-latest"
     steps:
       # Checkout the source
       - uses: "actions/checkout@v4"
@@ -33,23 +33,23 @@ jobs:
   # Publish to crates.io
   publish:
     needs: "check"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-latest"
     steps:
       # Checkout the source
       - uses: "actions/checkout@v4"
       # Check the version
       - name: "cargo release"
-        run: "cargo publish --token '${CRATES_IO_TOKEN}'"
+        run: "cargo publish --token '${{ secrets.CRATES_IO_TOKEN }}'"
 
   # Create a release in Github
   release:
     needs: "check"
-    runs-on: "ubuntu-24.04"
+    runs-on: "ubuntu-latest"
     steps:
       # Checkout the source
       - uses: "actions/checkout@v4"
       # Call the release from GH cli
       - name: "gh release"
         env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: "./scripts/ci/create-release.sh '${{ github.ref_name }}'"
