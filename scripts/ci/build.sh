@@ -19,4 +19,4 @@ else
     exit 2
 fi
 
-cargo build ${mode_str} --all-features --tests --examples --bins
+cargo --color always build ${mode_str} --all-features --tests --examples --bins

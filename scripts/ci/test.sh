@@ -5,5 +5,5 @@
 # It checks both formatting and rust + clippy linting rules
 #
 
-cargo fmt --check
-cargo test --all-features
+cargo --color always fmt --check
+cargo --color always test --all-features

@@ -1,6 +1,6 @@
 use std::{
     path::{Path, PathBuf},
-    process::{Command, ExitStatus},
+    process::{Command, ExitStatus, Stdio},
 };
 
 /// The executor of commands
@@ -29,43 +29,11 @@ pub enum RunScriptError {
     OutputParse(PathBuf),
 }
 
-/// The output of a script
-#[derive(Debug)]
-pub struct ScriptOutput {
-    stdout: String,
-    stderr: String,
-    status: ExitStatus,
-}
-
-impl ScriptOutput {
-    /// Create a new [`ScriptOutput`] object
-    pub fn new(stdout: String, stderr: String, status: ExitStatus) -> Self {
-        Self {
-            stdout,
-            stderr,
-            status,
-        }
-    }
-
-    /// Standard output getter
-    pub fn stdout(&self) -> &str {
-        &self.stdout
-    }
-
-    /// Standard error getter
-    pub fn stderr(&self) -> &str {
-        &self.stderr
-    }
-
-    /// Status getter
-    pub fn status(&self) -> ExitStatus {
-        self.status
-    }
-}
-
 /// Runs a script from its path
 ///
 /// Forwards the given arguments to the scripts
+///
+/// The script will take control over stdin, stdout and stderr during execution
 ///
 /// # Errors
 ///
@@ -74,7 +42,7 @@ impl ScriptOutput {
 /// - Script is not executable;
 /// - Error running the script;
 /// - Error parsing script output;
-pub fn run_script(path: &Path, arguments: &[String]) -> Result<ScriptOutput, RunScriptError> {
+pub fn run_script(path: &Path, arguments: &[String]) -> Result<ExitStatus, RunScriptError> {
     if !path.exists() {
         return Err(RunScriptError::NotFound(path.to_path_buf()));
     }
@@ -87,19 +55,17 @@ pub fn run_script(path: &Path, arguments: &[String]) -> Result<ScriptOutput, Run
     if !super::read::is_path_executable(md.permissions()) {
         return Err(RunScriptError::NotExecutable(path.to_path_buf()));
     }
-    let cmd_output = Command::new(EXECUTOR)
+
+    let status = Command::new(EXECUTOR)
         .arg(path)
         .args(arguments)
-        .output()
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .spawn()
+        .map_err(|err| RunScriptError::RunFailure(path.to_path_buf(), err))?
+        .wait()
         .map_err(|err| RunScriptError::RunFailure(path.to_path_buf(), err))?;
-    let parsed_stdout = String::from_utf8(cmd_output.stdout)
-        .map_err(|_| RunScriptError::OutputParse(path.to_path_buf()))?;
-    let parsed_stderr = String::from_utf8(cmd_output.stderr)
-        .map_err(|_| RunScriptError::OutputParse(path.to_path_buf()))?;
 
-    Ok(ScriptOutput::new(
-        parsed_stdout,
-        parsed_stderr,
-        cmd_output.status,
-    ))
+    Ok(status)
 }

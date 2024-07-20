@@ -3,4 +3,4 @@
 # This script lints the system
 #
 
-cargo clippy --all-features --tests --examples --bins
+cargo clippy --color always --all-features --tests --examples --bins

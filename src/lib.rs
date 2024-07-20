@@ -13,5 +13,5 @@ mod run;
 // ********** Re-exports ********** //
 pub use self::{
     read::{find_script, list_scripts, FindScriptError, ListScriptsError},
-    run::{run_script, RunScriptError, ScriptOutput},
+    run::{run_script, RunScriptError},
 };

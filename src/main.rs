@@ -35,15 +35,9 @@ fn main() -> ExitCode {
     };
 
     match lazy_badger::run_script(&script_path, &cli.args) {
-        Ok(output) if output.status().success() => {
-            println!("{}", output.stdout());
-            eprintln!("{}", output.stderr());
-            ExitCode::SUCCESS
-        }
-        Ok(output) => {
-            println!("{}", output.stdout());
-            eprintln!("{}", output.stderr());
-            let code = match output.status().code() {
+        Ok(status) if status.success() => ExitCode::SUCCESS,
+        Ok(status) => {
+            let code = match status.code() {
                 Some(c) => u8::try_from(c).unwrap_or(EXIT_UNKNOWN_CODE),
                 None => EXIT_UNKNOWN_CODE,
             };
