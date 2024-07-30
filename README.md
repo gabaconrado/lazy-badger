@@ -58,6 +58,7 @@ lazy-badger --help
 
 - Only works for systems that use `bash` as their underlying command executor;
 - Scripts require to be readable and executable by the user running the application;
+- Not really sure how to make scripts that calls `$EDITOR` to work;
 
 ## Future improvements
 
