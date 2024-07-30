@@ -1,6 +1,4 @@
-//! Lazy badger library
-//!
-//! All required functionalities to support the lazy-badger binary
+#![doc = include_str!("../README.md")]
 
 /// Supported bash extension of script
 const BASH_EXTENSION: &str = "sh";

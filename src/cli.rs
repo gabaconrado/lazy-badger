@@ -12,7 +12,7 @@ pub const DEFAULT_SCRIPTS_ROOT: &str = "scripts";
 #[command(version, about)]
 pub struct Cli {
     /// The name of the script
-    pub name: String,
+    pub name: Option<String>,
 
     /// The list of arguments to be forwarded to the script
     pub args: Vec<String>,

@@ -9,7 +9,10 @@ tag="${1}"
 
 if [ -z "${tag}" ]; then
     echo "Missing tag parameter"
+    exit 1
 fi
+
+./scripts/ci/check-version.sh "${tag}"
 
 current_branch="$(git branch --show-current)"
 

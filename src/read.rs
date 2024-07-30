@@ -56,7 +56,6 @@ pub fn find_script(root: &Path, name: String) -> Result<Option<PathBuf>, FindScr
 ///   - Have the [`BASH_EXTENSION`] extension;
 ///   - Are executable;
 ///
-///
 /// # Notes
 ///
 /// - Ignores files that fail to be read

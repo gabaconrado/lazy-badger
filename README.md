@@ -43,6 +43,15 @@ lazy-badger script_two
 
 # Pass arguments to them
 lazy-badger with_args foo bar baz
+
+# Change default script root
+lazy-badger --scripts-root my-root-dir my-script
+
+# List all available scripts
+lazy-badger
+
+# Help message
+lazy-badger --help
 ```
 
 ## Requirements/Limitations
